@@ -1,4 +1,3 @@
-from collections import defaultdict
 from functools import reduce
 from operator import mul
 file_path = "inputs/day2.txt"
