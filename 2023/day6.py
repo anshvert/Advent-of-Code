@@ -35,7 +35,7 @@ def ways2Win(inputFile):
     # print(raceTimes,raceDistances)
     # P1
     # return findWays(raceTimes,raceDistances)
-    # P2 46561107
+    # P2
     return findAWay(int(raceTimeString), int(raceDistString))
 
 
