@@ -54,7 +54,7 @@ def closeLocation(seedMat):
             seeds = seedMap[colonIndex+2:].split(" ")
 
     minLocation = float("inf")
-    print(seedSoil,soilFert,fertWater,waterLight,lightTemp,tempHum,humLocation)
+    #print(seedSoil,soilFert,fertWater,waterLight,lightTemp,tempHum,humLocation)
     for i in range(0,len(seeds),2):
         for seed in range(int(seeds[i]),int(seeds[i]) + int(seeds[i+1])):
             minLocation = min(minLocation,findSeedLocation(int(seed),mapsArray,0))
