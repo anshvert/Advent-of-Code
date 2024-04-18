@@ -16,13 +16,41 @@ toggle 0,0 through 999,0 would toggle the first line of 1000 lights, turning off
 turn off 499,499 through 500,500 would turn off (or leave off) the middle four lights.
 After following the instructions, how many lights are lit?
 """
+from collections import defaultdict
 
 inputPath = "./input6.txt"
 
-def theLights(file):
-    for instructions in file:
-        print(instructions)
+def turnLight(lightMap,initialPos,endingPos,value):
+    for i in range(initialPos[0],endingPos[0]+1):
+        for j in range(initialPos[1],endingPos[1]+1):
+            lightMap[(i,j)] = value
 
+def getValueFromString(string):
+    x,y = string.strip().split(",")
+    return int(x),int(y)
+
+def toggle(lightMap,initialPos,endingPos):
+    for i in range(initialPos[0],endingPos[0]+1):
+        for j in range(initialPos[1],endingPos[1]+1):
+            lightMap[(i,j)] ^= 1
+
+def theLights(file):
+    lightMap = defaultdict(int)
+    for instructions in file:
+        leftInstruction,rightInstruction = instructions.split("through")
+        #print(leftInstruction,rightInstruction)
+        leftInstructionCommands = leftInstruction.split()
+        startingPos,endingPos = getValueFromString(leftInstructionCommands[-1]),getValueFromString(rightInstruction)
+        #print(startingPos,endingPos)
+        if leftInstructionCommands[0] == "turn":
+            if leftInstructionCommands[1] == "on":
+                turnLight(lightMap,startingPos,endingPos,1)
+            elif leftInstructionCommands[1] == "off":
+                turnLight(lightMap,startingPos,endingPos,0)
+        else:
+            toggle(lightMap,startingPos,endingPos)
+    #print(lightMap)
+    return sum(lightMap.values())
 
 with open(inputPath,"r") as file:
     print(theLights(file))
