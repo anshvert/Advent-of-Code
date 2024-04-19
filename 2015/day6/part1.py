@@ -38,10 +38,8 @@ def theLights(file):
     lightMap = defaultdict(int)
     for instructions in file:
         leftInstruction,rightInstruction = instructions.split("through")
-        #print(leftInstruction,rightInstruction)
         leftInstructionCommands = leftInstruction.split()
         startingPos,endingPos = getValueFromString(leftInstructionCommands[-1]),getValueFromString(rightInstruction)
-        #print(startingPos,endingPos)
         if leftInstructionCommands[0] == "turn":
             if leftInstructionCommands[1] == "on":
                 turnLight(lightMap,startingPos,endingPos,1)
@@ -49,7 +47,6 @@ def theLights(file):
                 turnLight(lightMap,startingPos,endingPos,0)
         else:
             toggle(lightMap,startingPos,endingPos)
-    #print(lightMap)
     return sum(lightMap.values())
 
 with open(inputPath,"r") as file:
