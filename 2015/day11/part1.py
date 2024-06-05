@@ -15,7 +15,7 @@ Passwords may not contain the letters i, o, or l, as these letters can be mistak
 Passwords must contain at least two different, non-overlapping pairs of letters, like aa, bb, or zz.
 For example:
 
-hijklmmn meets the first requirement (because it contains the straight hij) but fails the second requirement requirement (because it contains i and l).
+hijklmmn meets the first requirement (because it contains the straight hij) but fails the second requirement (because it contains i and l).
 abbceffg meets the third requirement (because it repeats bb and ff) but fails the first requirement.
 abbcegjk fails the third requirement, because it only has one double letter (bb).
 The next password after abcdefgh is abcdffaa.
@@ -24,4 +24,56 @@ Given Santa's current password (your puzzle input), what should his next passwor
 
 Your puzzle input is cqjxjnds.
 """
+
+puzzleInput = "cqjxxzaa"
+
+def checkStraightLetters(string):
+    i = 0
+    while i < len(string) - 2:
+        if ord(string[i + 2]) - ord(string[i + 1]) == 1 and ord(string[i + 1]) - ord(string[i]) == 1:
+            return True
+        i += 1
+    return False
+
+def forbiddenLetters(string):
+    if "i" not in string and "o" not in string and "l" not in string:
+        return True
+    return False
+
+def nonOverlappingPairs(string):
+    c,i = 0,0
+    while i < len(string)-1:
+        if string[i] == string[i+1]:
+            c += 1
+            i += 2
+        else:
+            i += 1
+    return c >= 2
+
+def incrementString(string):
+    lS,ind,incI = list(string),len(string)-1,None
+    while ind >= 0:
+        if string[ind] != "z":
+            lS[ind] = chr(ord(string[ind]) + 1)
+            break
+        else:
+            lS[ind] = 'a'
+            ind -= 1
+    return ''.join(lS)
+
+
+def newPassword(string):
+    tc,lc = 0,20
+    while 1:
+        if nonOverlappingPairs(string) and forbiddenLetters(string) and checkStraightLetters(string):
+            print(string)
+            break
+        else:
+            string = incrementString(string)
+            if tc < lc:
+                #print(string)
+                tc += 1
+
+newPassword(puzzleInput)
+
 
