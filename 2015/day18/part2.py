@@ -67,6 +67,62 @@ After 4 steps, this example has four lights on.
 
 In your grid of 100x100 lights, given your initial configuration, how many lights are on after 100 steps?
 
+--- Part Two ---
+
+You flip the instructions over; Santa goes on to point out that this is all just an implementation of Conway's Game of Life. At least, it was, until you notice that something's wrong with the grid of lights you bought: four lights, one in each corner, are stuck on and can't be turned off. The example above will actually run like this:
+
+Initial state:
+##.#.#
+...##.
+#....#
+..#...
+#.#..#
+####.#
+
+After 1 step:
+#.##.#
+####.#
+...##.
+......
+#...#.
+#.####
+
+After 2 steps:
+#..#.#
+#....#
+.#.##.
+...##.
+.#..##
+##.###
+
+After 3 steps:
+#...##
+####.#
+..##.#
+......
+##....
+####.#
+
+After 4 steps:
+#.####
+#....#
+...#..
+.##...
+#.....
+#.#..#
+
+After 5 steps:
+##.###
+.##..#
+.##...
+.##...
+#.#...
+##...#
+
+After 5 steps, this example now has 17 lights on.
+
+In your grid of 100x100 lights, given your initial configuration, but with the four corners always in the on state, how many lights are on after 100 steps?
+
 
 """
 
@@ -80,12 +136,17 @@ def countOn(grid):
         count += i.count('#')
     return count
 
+def cornerLights(i,j,grid):
+    if (i,j) in [(0,0), (0,len(grid[0])-1), (len(grid)-1, 0), (len(grid)-1, len(grid[0])-1)]:
+        return True
+    return False
+
 def getNStats(grid,i,j):
     on,off = 0,0
     dirs = [(0,1),(0,-1),(1,0),(-1,0),(-1,-1),(-1,1),(1,-1),(1,1)]
     for x,y in dirs:
         if 0 <= i + x < len(grid) and 0 <= j + y < len(grid[0]):
-            if grid[i+x][j+y] == ".":
+            if grid[i+x][j+y] == "." and not cornerLights(i+x,j+y,grid):
                 off += 1
             else:
                 on += 1
@@ -99,15 +160,14 @@ def printGrid(grid):
 def animate(grid, cSteps):
     global steps
     if cSteps == steps:
-        #printGrid(grid)
-        #print("Total Steps", steps)
         return countOn(grid)
 
     aGrid = copy.deepcopy(grid)
     for i in range(len(grid)):
         for j in range(len(grid[0])):
+            if cornerLights(i,j,grid):
+                continue
             on,off = getNStats(grid,i,j)
-            #print(on,off)
             if grid[i][j] == ".":
                 if on == 3:
                     aGrid[i][j] = '#'
