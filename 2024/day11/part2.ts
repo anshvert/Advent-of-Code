@@ -1,36 +1,46 @@
-/**
- * --- Part Two ---
- *
- * The Historians sure are taking a long time. To be fair, the infinite corridors are very large.
- *
- * How many stones would you have after blinking a total of 75 times?
- */
-
 import * as fs from "fs"
+
+interface NumberStones {
+    (stoneMap: Map<string, number>, blinks: number): number
+}
+
+interface SetMap {
+    (map: Map<string, number>, key: string, val: number): Map<string, number>
+}
 
 fs.readFile("./input.txt",'utf-8', (err, data) => {
     if (err) throw err
     const stones: string[] = data.split(" ")
-    console.log(numberStones(stones,75))
+    let stoneMap: Map<string, number> = new Map()
+    for (let i = 0; i < stones.length; i++) {
+        stoneMap = setMap(stoneMap, stones[i], 1)
+    }
+    console.log(numberStones(stoneMap,75))
 })
 
-const numberStones = (stones: string[], blinks: number): number => {
+const numberStones: NumberStones = (stoneMap: Map<string, number>, blinks: number): number => {
     if (blinks === 0) {
-        return stones.length
+        return Array.from(stoneMap.values()).reduce((sum,val) => sum + val, 0)
     }
-    let blinkedStones: string[] = []
-    let stoneInd: number = 0
-    for (let i: number = 0; i < stones.length; i ++) {
-        if (stones[i] === '0') {
-            blinkedStones[stoneInd] = '1'
-        } else if (stones[i].length % 2 === 0) {
-            blinkedStones[stoneInd] = Number(stones[i].slice(0, Math.floor(stones[i].length / 2))).toString()
-            blinkedStones[stoneInd+1] = Number(stones[i].slice(Math.floor(stones[i].length / 2), stones[i].length)).toString()
-            stoneInd += 1
+    let blinkedStones: Map<string, number> = new Map()
+    stoneMap.forEach((val: number, key: string) => {
+        if (key === '0') {
+            const newVal = '1'
+            blinkedStones = setMap(blinkedStones, newVal, val)
+        } else if (key.length % 2 === 0) {
+            const stone1 = Number(key.slice(0, Math.floor(key.length / 2))).toString()
+            const stone2 = Number(key.slice(Math.floor(key.length / 2), key.length)).toString()
+            blinkedStones = setMap(blinkedStones, stone1, stoneMap.get(key) ?? 1)
+            blinkedStones = setMap(blinkedStones, stone2, stoneMap.get(key) ?? 1)
         } else {
-            blinkedStones[stoneInd] = (parseInt(stones[i]) * 2024).toString()
+            const newVal = (parseInt(key) * 2024).toString()
+            blinkedStones = setMap(blinkedStones, newVal, val)
         }
-        stoneInd += 1
-    }
+    })
     return numberStones(blinkedStones, blinks - 1)
+}
+
+const setMap: SetMap = (map: Map<string, number>, key: string, val: number): Map<string, number> => {
+    map.set(key, (map.get(key) ?? 0) + val)
+    return map
 }
