@@ -60,7 +60,7 @@ fs.readFile('./input.txt', 'utf8', (err: unknown, data: string): void => {
 
 const handleInvalid = (update: string[], orderMap: Map<string, string[]>): number => {
     const updateSet: Set<string> = new Set(update)
-    update.sort((a: string, b: string) => {
+    update.sort((a: string, b: string): number => {
         const mapA: number = orderMap.get(a)?.filter((val: string) => updateSet.has(val)).length || 0
         const mapB: number = orderMap.get(b)?.filter((val: string) => updateSet.has(val)).length || 0
         return mapB - mapA
