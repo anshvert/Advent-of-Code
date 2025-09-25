@@ -63,6 +63,6 @@ with open("input.txt", "r") as input_file:
     g1,packs = [],[]
     for package in input_file:
         packs.append(int(package))
-    desired_sum = sum(packs) // 4
+    desired_sum = sum(packs) // 4 # For part 1, change it to 3 (^_^)
     min_quantum_entanglement(g1,packs, desired_sum,0)
     print("Minimum QE",curr_min_qe)
