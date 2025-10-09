@@ -16,11 +16,25 @@ totally-real-room-200[decoy] is not.
 Of the real rooms from the list above, the sum of their sector IDs is 1514.
 
 What is the sum of the sector IDs of the real rooms?
+
+--- Part Two ---
+With all the decoy data out of the way, it's time to decrypt this list and get moving.
+
+The room names are encrypted by a state-of-the-art shift cipher, which is nearly unbreakable without the right software.
+However, the information kiosk designers at Easter Bunny HQ were not expecting to deal with a master cryptographer like yourself.
+
+To decrypt a room name, rotate each letter forward through the alphabet a number of times equal to the room's sector ID.
+A becomes B, B becomes C, Z becomes A, and so on. Dashes become spaces.
+
+For example, the real name for qzmt-zixmtkozy-ivhz-343 is very encrypted name.
+
+What is the sector ID of the room where North Pole objects are stored?
 """
 
 from collections import Counter
 
 total_sector_sum = 0
+real_rooms = []
 
 with open("input.txt") as file:
     lines = file.read().splitlines()
@@ -36,8 +50,22 @@ with open("input.txt") as file:
 
         if generated_checksum == checksum:
             total_sector_sum += int(sector_id)
+            real_rooms.append([room_components, int(sector_id)])
 
     file.close()
 
-print(total_sector_sum)
+print("Total Sector Sum ",total_sector_sum)
 
+for room_component, sector_id in real_rooms:
+    decrypted_parts = []
+    for encrypted_part in room_component[:-1]:
+        decrypted_word = "".join([
+            chr(((ord(letter) - ord('a') + sector_id) % 26) + ord('a'))
+            for letter in encrypted_part
+        ])
+        decrypted_parts.append(decrypted_word)
+    
+    decrypted_name = " ".join(decrypted_parts)
+
+    if "north" in decrypted_name:
+        print(f"Found target room: '{decrypted_name}' with Sector ID: {sector_id}")
