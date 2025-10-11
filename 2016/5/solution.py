@@ -23,17 +23,17 @@ Your puzzle input is ffykfhsq.
 
 import hashlib
 
-# door_id,ind = "ffykfhsq", 0
-# current_password = ""
-#
-# while len(current_password) < 8:
-#     door_index = door_id + str(ind)
-#     door_index_hash = hashlib.md5(door_index.encode()).hexdigest()
-#     if door_index_hash[:5] == "00000":
-#         current_password += door_index_hash[5]
-#     ind += 1
-#
-# print("Current Password:", current_password)
+door_id,ind = "ffykfhsq", 0
+current_password = ""
+
+while len(current_password) < 8:
+    door_index = door_id + str(ind)
+    door_index_hash = hashlib.md5(door_index.encode()).hexdigest()
+    if door_index_hash[:5] == "00000":
+        current_password += door_index_hash[5]
+    ind += 1
+
+print("Current Password:", current_password)
 
 """
 --- Part Two ---
